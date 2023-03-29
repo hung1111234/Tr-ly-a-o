@@ -27,6 +27,7 @@ from email.mime.multipart import MIMEMultipart
 from youtubesearchpython import VideosSearch
 import pyttsx3
 from googlesearch import search
+from gtts import gTTS
 # from newspaper import Article
 
 #%% ngon ngu
@@ -42,6 +43,10 @@ def speak(text):
     engine.setProperty('voice', voices[1].id)
     engine.say(text)
     engine.runAndWait()
+    # tts = gTTS(text = "text",lang='vi')
+    # tts.save("siri.mp3")
+    # os.system("start siri.mp3")
+    # os.remove("siri.mp3")
 
 #%%
 def get_audio():
@@ -71,14 +76,7 @@ def get_text():
             speak("Tôi không nghe rõ. Bạn nói lại được không!")
     time.sleep(2)
     stop()
-    return None
-
-def search_google():
-    query = "python programming"
-    search_results = list(search(query, num_results=10))
-    # Lấy ngẫu nhiên một đường link trong danh sách kết quả tìm kiếm
-    random_link = random.choice(search_results)
-    webbrowser.open(random_link)
+    return None   
 
 #%%
 def hello(name):
@@ -102,6 +100,7 @@ def get_time(text):
         speak("Tôi chưa hiểu ý của bạn. Bạn nói lại được không?")
 
 def search_youtube():
+    speak("Vui lòng nói từ khóa tìm kiếm:")
     text = get_text()
     search = VideosSearch(text)
 
@@ -235,7 +234,8 @@ def tell_me_about():
         
 #%%
 def help_me():
-    speak("""Tôi có thể giúp bạn thực hiện các câu lệnh sau đây:
+    speak("Tôi có thể giúp bạn thực hiện các câu lệnh sau đây:")
+    print("""
     1. Chào hỏi
     2. Hiển thị giờ
     3. Mở website, application
@@ -244,7 +244,7 @@ def help_me():
     6. Mở video trên youtube
     7. Đọc báo hôm nay
     8. Kể bạn biết về thế giới""")
-    time.sleep(22)
+    time.sleep(10)
 
 #%%
 def assistant():
@@ -287,5 +287,6 @@ def assistant():
                 tell_me_about()
             else:
                 speak("Bạn cần tôi giúp gì ạ?")
+                help_me()
 #%%
 assistant()
