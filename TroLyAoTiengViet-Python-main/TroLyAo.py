@@ -279,8 +279,6 @@ def assistant():
                     search_youtube()
                 else:
                     open_application(text)
-            elif "youtube" in text:
-                search_youtube(text)
             elif "thời tiết" in text:
                 current_weather()
             elif "đọc báo" in text:
