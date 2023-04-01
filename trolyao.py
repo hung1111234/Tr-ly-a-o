@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import playsound
 import speech_recognition as sr
