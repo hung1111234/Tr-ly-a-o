@@ -283,6 +283,7 @@ def assistant(text):
     elif "định nghĩa" in text or "cho tôi biết" in text or "tôi muốn biết" in text or "thông tin" in text:
         tell_me_about()
         ok = 1
+    time.sleep(2)
     if ok:
         speak("Bạn cần tôi giúp gì nữa không ạ?")
     else: 
@@ -290,7 +291,7 @@ def assistant(text):
             
     text_widget.configure(state=DISABLED)
     flag = True
-                
+    
 
 def speak(text):
     tts = gTTS(text = text,lang='vi')
