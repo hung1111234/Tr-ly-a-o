@@ -25,12 +25,23 @@ wikipedia.set_lang('vi')
 language = 'vi'
 flag = True
 
-
+def say():
+    # Ghi âm giọng nói và chuyển đổi thành văn bản
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        audio = r.record(source, duration=5)
+    try:
+        text = r.recognize_google(audio, language="vi-VN")
+        You_say(text, text_widget)
+        return text
+    except Exception:
+        You_say("...", text_widget)
+        return "..."
 #%%
 def hello():
     speak("Xin chào bạn, bạn tên là gì ạ!")
     while True:
-        text = record()
+        text = say()
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -44,7 +55,7 @@ def hello():
         speak("Chào buổi tối bạn {}. Chúc bạn một buổi tối vui vẻ.".format(name))
     speak("Bạn có khỏe không?")
     while True:
-        text = record()
+        text = say()
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -64,7 +75,7 @@ def get_time(text):
 def search_youtube():
     speak("Vui lòng nói từ khóa tìm kiếm mà bạn muốn xem")
     while True:
-        text = record()
+        text = say()
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -121,7 +132,7 @@ def open_application(text):
 def open_google_and_search():
     speak("Vui lòng nói từ khóa tìm kiếm trên google:")
     while True:
-        text = record()
+        text = say()
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -139,7 +150,7 @@ def open_google_and_search():
 def current_weather():
     speak("Bạn muốn xem thời tiết ở đâu ạ.")
     while True:
-        city = record()
+        city = say()
         if city == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -177,7 +188,7 @@ def read_news():
     speak("Bạn muốn đọc báo về gì")
 
     while True:
-        queue = record()
+        queue = say()
         if queue == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
@@ -201,7 +212,7 @@ def tell_me_about():
     try:
         speak("Bạn muốn nghe về gì ạ")
         while True:
-            text = record()
+            text = say()
             if text == '...': 
                 speak("Tôi không nghe rõ, bạn có thể nói lại được không")
             else: break
@@ -210,7 +221,7 @@ def tell_me_about():
         for content in contents[1:]:
             speak("Bạn muốn nghe thêm không")
             while True:
-                text = record()
+                text = say()
                 if text == '...': 
                     speak("Tôi không nghe rõ, bạn có thể nói lại được không")
                 else: break
@@ -315,7 +326,6 @@ def record():
     try:
         text = r.recognize_google(audio, language="vi-VN")
         You_say(text, text_widget)
-        return text
     except Exception:
         You_say("...", text_widget)
     finally:
