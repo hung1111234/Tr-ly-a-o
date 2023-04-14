@@ -3,26 +3,17 @@ import threading
 import playsound
 import speech_recognition as sr
 import time
-import ctypes
 import wikipedia
 import datetime
 import json
 import re
-import ctypes
 import random
 import urllib.request
 import sys
 import webbrowser
-import smtplib
 import requests
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
 from time import strftime
 from gtts import gTTS
-import youtubesearchpython
-from youtube_search import YoutubeSearch
-from email.mime.multipart import MIMEMultipart
 from youtubesearchpython import VideosSearch
 import pyttsx3
 from googlesearch import search
@@ -33,7 +24,6 @@ from tkinter import *
 wikipedia.set_lang('vi')
 language = 'vi'
 flag = True
-# path = ChromeDriverManager().install()
 
 
 #%%
@@ -78,7 +68,6 @@ def search_youtube():
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
-    text_widget.insert(END, "\n\n")
     search = VideosSearch(text)
 
     # Lấy kết quả tìm kiếm
@@ -136,7 +125,6 @@ def open_google_and_search():
         if text == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
-    text_widget.insert(END, "\n\n")
     # Tìm kiếm trên Google và lưu trữ các kết quả trong danh sách 'search_results'
     try:
         search_results = list(search(text, num_results=10))
@@ -151,11 +139,10 @@ def open_google_and_search():
 def current_weather():
     speak("Bạn muốn xem thời tiết ở đâu ạ.")
     while True:
-        text = record()
-        if text == '...': 
+        city = record()
+        if city == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
         else: break
-    text_widget.insert(END, "\n\n")
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
     if not city:
         pass
@@ -218,7 +205,6 @@ def tell_me_about():
             if text == '...': 
                 speak("Tôi không nghe rõ, bạn có thể nói lại được không")
             else: break
-        # text_widget.insert(END, "\n\n")
         contents = wikipedia.summary(text).split('\n')
         speak(contents[0])
         for content in contents[1:]:
@@ -254,9 +240,7 @@ def assistant(text):
     global flag
     flag = False
     ok = 0
-    if text == "" or text == '...':
-        speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-    elif "làm gì" in text or 'làm được gì' in text:
+    if "làm gì" in text or 'làm được gì' in text:
         help_me()
         ok = 1
     elif "chào" in text or "hello" in text:
@@ -291,7 +275,7 @@ def assistant(text):
             
     text_widget.configure(state=DISABLED)
     flag = True
-    
+                
 
 def speak(text):
     tts = gTTS(text = text,lang='vi')
@@ -345,7 +329,7 @@ TEXT_COLOR = "#EAECEE"
 FONT = "Helvetica 14"
 FONT_BOLD = "Helvetica 13 bold"
 window = Tk()
-window.title("A+ Python")
+window.title("Nhóm 2")
 window.configure(width=600, height=600, bg=BG_COLOR)
 # head label
 head_lable = Label(window, bg=BG_COLOR, fg=TEXT_COLOR, text="Welcome", font=FONT_BOLD, pady=10)
