@@ -191,22 +191,23 @@ def read_news():
         queue = say()
         if queue == '...': 
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
-    params = {
-        'apiKey': '9007bba8aca54b379ccba2964abac887',
-        'q': queue,
-    }
-    api_result = requests.get('http://newsapi.org/v2/top-headlines?', params)
-    api_response = api_result.json()
-    if len(api_response['articles']) == 0:
-        speak("Tôi không tìm thấy tin tức về chủ đề này.")
-        return
-    speak("Tin tức")
-    for number, result in enumerate(api_response['articles'], start=1):
-        speak(f"""Tin {number}:\nTiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nLink: {result['url']}\nNội dung: {result['content']}
-    """)
-        if number <= 3:
-            webbrowser.open(result['url'])
+        else:
+            params = {
+                'apiKey': '9007bba8aca54b379ccba2964abac887',
+                'q': queue,
+            }
+            api_result = requests.get('http://newsapi.org/v2/top-headlines?', params)
+            api_response = api_result.json()
+            if len(api_response['articles']) == 0:
+                speak("Tôi không tìm thấy tin tức về chủ đề này. Bạn nói lại chủ đề bạn muốn đọc giúp tôi được không")
+            else:
+                speak("Tin tức")
+                for number, result in enumerate(api_response['articles'], start=1):
+                    speak(f"""Tin {number}:\nTiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nLink: {result['url']}\nNội dung: {result['content']}
+                """)
+                    if number <= 3:
+                        webbrowser.open(result['url'])
+                return
 
 #%%
 def tell_me_about():
