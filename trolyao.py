@@ -210,16 +210,17 @@ def read_news():
                 pass
             else:
                 summary = soup.find('p', class_='description').text.strip()
+            # lấy nội dung nếu cần thiết để cho bot nói
             if soup.find('article', class_='fck_detail') == None:
                 pass
             else:
                 article_content = soup.find('article', class_='fck_detail').text.strip()
                 sentences = article_content.split('.')
 
-                if soup.find('p', class_='description') != None:
-                    text = f"Tiêu đề: {title}\n\n Trích dẫn: {summary}"
-                else: text = f"Tiêu đề: {title}"
-                speak(text)
+            if soup.find('p', class_='description') != None:
+                text = f"Tiêu đề: {title}\n\n Trích dẫn: {summary}"
+            else: text = f"Tiêu đề: {title}"
+            speak(text)
             webbrowser.open(link)
         speak("Tôi đã mở 3 bài báo mới nhất, bạn có thể đọc qua")    
     except:
