@@ -360,12 +360,13 @@ def Bot_say(text, text_widget):
     text_widget.insert(END, f"Trợ lý ảo: {text}\n\n")
     text_widget.configure(state=DISABLED)
     text_widget.see(END)
+    window.update()
 
 def You_say(text, text_widget):
     text_widget.configure(state=NORMAL)
     text_widget.insert(END, f"Tôi: {text}\n\n")
     text_widget.see(END)
-    # text_widget.configure(state=DISABLED)
+    window.update()
     if flag == True: assistant(text.lower())
     
 def _on_enter_pressed(event):
