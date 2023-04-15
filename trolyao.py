@@ -202,11 +202,9 @@ def read_news():
                 speak("Tôi không tìm thấy tin tức về chủ đề này. Bạn nói lại chủ đề bạn muốn đọc giúp tôi được không")
             else:
                 speak("Tin tức")
-                for number, result in enumerate(api_response['articles'], start=1):
-                    speak(f"""Tin {number}:\nTiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nLink: {result['url']}\nNội dung: {result['content']}
-                """)
-                    if number <= 3:
-                        webbrowser.open(result['url'])
+                speak(f"""Tin {number}:\nTiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nNội dung: {result['content']}""")
+                if number <= 3:
+                    webbrowser.open(result['url'])
                 return
 
 #%%
