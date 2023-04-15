@@ -19,7 +19,7 @@ import pyttsx3
 from googlesearch import search
 from gtts import gTTS
 from tkinter import *
-# import a
+import cv2
 #%% ngon ngu
 wikipedia.set_lang('vi')
 language = 'vi'
@@ -61,17 +61,14 @@ def hello():
         else: break
     
 
-#%%
+#xem thời gian
 def get_time(text):
     now = datetime.datetime.now()
-    if "giờ" in text:
-        speak('Bây giờ là %d giờ %d phút' % (now.hour, now.minute))
-    elif "ngày" in text:
-        speak("Hôm nay là ngày %d tháng %d năm %d" %
-              (now.day, now.month, now.year))
-    else:
-        speak("Tôi không hiểu ý của bạn. Bạn nói lại được không?")
+    speak('Bây giờ là %d giờ %d phút' % (now.hour, now.minute))
+    speak("Hôm nay là ngày %d tháng %d năm %d" % (now.day, now.month, now.year))
 
+
+#xem video trên youtube
 def search_youtube():
     speak("Vui lòng nói từ khóa tìm kiếm mà bạn muốn xem")
     while True:
@@ -93,7 +90,7 @@ def search_youtube():
     else:
         speak("Không tìm thấy kết quả phù hợp trên YouTube")
 
-#%%
+#mở ứng dụng
 def open_application(text):
     if "google" in text: 
         os.startfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
@@ -128,7 +125,7 @@ def open_application(text):
         speak("Ứng dụng chưa được cài đặt hoặc tôi chưa hiểu ý bạn. Bạn hãy thử lại!")
 
     
-#%%
+#search_google
 def open_google_and_search():
     speak("Vui lòng nói từ khóa tìm kiếm trên google:")
     while True:
@@ -146,7 +143,7 @@ def open_google_and_search():
             speak("Trang web đã mở thành công")
     except: speak("Tôi không tìm thấy kết quả này trên google")
     
-#%%
+#xem thời tiết
 def current_weather():
     speak("Bạn muốn xem thời tiết ở đâu ạ.")
     while True:
@@ -182,7 +179,7 @@ def current_weather():
     else:
         speak("Tôi không tìm thấy địa chỉ nơi bạn muốn biết thời tiết")
 
-#%%
+#đọc báo
 def read_news():
     
     speak("Bạn muốn đọc báo về gì")
@@ -232,7 +229,43 @@ def tell_me_about():
         speak('Cảm ơn bạn đã lắng nghe!!!')
     except:
         speak("Tôi không tìm thấy thông tin của thuật ngữ mà bạn cần.")
-        
+
+def my_location():
+    # Lấy địa chỉ IP của client
+    ip_add = requests.get('https://api.ipify.org').text
+    
+    # Truy vấn địa lý thông qua API của geojs.io
+    url = 'https://get.geojs.io/v1/ip/geo/' + ip_add + '.json'
+    geo_requests = requests.get(url)
+    geo_data = geo_requests.json()
+    
+    # Lấy thông tin về thành phố, bang/tỉnh, quốc gia từ dữ liệu trả về
+    city = geo_data['city']
+    state = geo_data['region']
+    country = geo_data['country']
+    
+    # Trả về tuple chứa thông tin về địa chỉ của client
+    speak("Bạn đang ở " + " " + city + " " + state + " " + country)
+
+def screen():
+    # Tạo một đối tượng VideoCapture để đọc dữ liệu từ webcam
+    cap = cv2.VideoCapture(0)
+    speak("Vui lòng nhấn phím q để chụp ảnh")
+    # Đọc từng khung hình liên tiếp từ webcam
+    while True:
+        ret, frame = cap.read()
+
+        # Hiển thị khung hình
+        cv2.imshow('frame', frame)
+
+        # Nếu nhấn phím 'q', thoát vòng lặp
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imwrite('screenshot.png', frame)
+            break
+    speak("Chụp ảnh thành công")
+    # Giải phóng tài nguyên và đóng cửa sổ
+    cap.release()
+    cv2.destroyAllWindows()
 #%%
 def help_me():
 
@@ -244,7 +277,9 @@ def help_me():
         5. Dự báo thời tiết
         6. Xem video, nghe nhạc trên youtube
         7. Đọc báo hôm nay
-        8. Tìm thông tin của một thuật ngữ hoặc một người""")
+        8. Tìm thông tin của một thuật ngữ hoặc một người
+        9. Xem vị trí của bạn
+        10. Selfies""")
 
 #%%
 def assistant(text):
@@ -257,7 +292,7 @@ def assistant(text):
     elif "chào" in text or "hello" in text:
         hello()
         ok = 1
-    elif "hiện tại" in text or "giờ" in text or "ngày" in text:
+    elif "hiện tại" in text or "giờ" in text or "ngày" in text:
         get_time(text)
         ok = 1
     elif "tìm kiếm" in text or "trên google" in text or "web" in text:
@@ -275,8 +310,14 @@ def assistant(text):
     elif "đọc báo" in text:
         read_news()
         ok = 1
+    elif "của tôi" in text or "location" in text:
+        my_location()
+        ok = 1
     elif "định nghĩa" in text or "cho tôi biết" in text or "tôi muốn biết" in text or "thông tin" in text:
         tell_me_about()
+        ok = 1
+    elif "screen" in text or "chụp ảnh" in text or "selfie" in text:
+        screen()
         ok = 1
     time.sleep(2)
     if ok:
