@@ -181,29 +181,50 @@ def current_weather():
 
 #đọc báo
 def read_news():
-    
-    speak("Bạn muốn đọc báo về gì")
+    url = 'https://vnexpress.net/'
+    try: 
+        # Gửi yêu cầu GET đến trang web và lấy nội dung trang web
+        response = requests.get(url)
+        content = response.content
 
-    while True:
-        queue = say()
-        if queue == '...': 
-            speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else:
-            params = {
-                'apiKey': '9007bba8aca54b379ccba2964abac887',
-                'q': queue,
-            }
-            api_result = requests.get('http://newsapi.org/v2/top-headlines?', params)
-            api_response = api_result.json()
-            if len(api_response['articles']) == 0:
-                speak("Tôi không tìm thấy tin tức về chủ đề này. Bạn nói lại chủ đề bạn muốn đọc giúp tôi được không")
+        # Sử dụng BeautifulSoup để phân tích cú pháp nội dung trang web
+        soup = BeautifulSoup(content, 'html.parser')
+
+        # Tìm các đường dẫn đến các bài báo mới nhất trên trang web
+        articles = soup.find_all('article', class_='item-news')
+
+        # Lấy đường dẫn đến 3 bài báo mới nhất
+        links = [article.a['href'] for article in articles[:3]]
+        # Đọc các bài báo mới nhất
+        for link in links:
+            response = requests.get(link)
+            content = response.content
+            soup = BeautifulSoup(content, 'html.parser')
+
+            # Lấy tiêu đề, trích dẫn và nội dung của bài báo
+            if soup.find('h1', class_='title-detail') == None:
+                pass
             else:
-                speak("Tin tức")
-                result = api_response['articles'][0]
-                speak(f"""Tiêu đề: {result['title']}\nTrích dẫn: {result['description']}\nNội dung: {result['content']}""")
-                webbrowser.open(result['url'])
-                return
+                title = soup.find('h1', class_='title-detail').text.strip()
+            if soup.find('p', class_='description') == None:
+                pass
+            else:
+                summary = soup.find('p', class_='description').text.strip()
+            if soup.find('article', class_='fck_detail') == None:
+                pass
+            else:
+                article_content = soup.find('article', class_='fck_detail').text.strip()
+                sentences = article_content.split('.')
 
+                if soup.find('p', class_='description') != None:
+                    text = f"Tiêu đề: {title}\n\n Trích dẫn: {summary}"
+                else: text = f"Tiêu đề: {title}"
+                speak(text)
+            webbrowser.open(link)
+        speak("Tôi đã mở 3 bài báo mới nhất, bạn có thể đọc qua")    
+    except:
+        speak("Xin lỗi, hiện tại tôi đang quá tải, xin vui lòng thử lại sau")
+        
 #%%
 def tell_me_about():
     try:
