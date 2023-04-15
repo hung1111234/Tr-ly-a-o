@@ -218,7 +218,7 @@ def read_news():
                 sentences = article_content.split('.')
 
             if soup.find('p', class_='description') != None:
-                text = f"Tiêu đề: {title}\n\n Trích dẫn: {summary}"
+                text = f"Tiêu đề: {title}\n\n Trích dẫn từ: {summary}"
             else: text = f"Tiêu đề: {title}"
             speak(text)
             webbrowser.open(link)
