@@ -6,20 +6,17 @@ import time
 import wikipedia
 import datetime
 import json
-import re
 import random
 import urllib.request
-import sys
 import webbrowser
 import requests
 from time import strftime
 from gtts import gTTS
 from youtubesearchpython import VideosSearch
-import pyttsx3
 from googlesearch import search
-from gtts import gTTS
 from tkinter import *
 import cv2
+from bs4 import BeautifulSoup
 #%% ngon ngu
 wikipedia.set_lang('vi')
 language = 'vi'
