@@ -17,10 +17,12 @@ from googlesearch import search
 from tkinter import *
 import cv2
 from bs4 import BeautifulSoup
-#%% ngon ngu
-wikipedia.set_lang('vi')
-language = 'vi'
+
+# %% ngon ngu
+wikipedia.set_lang("vi")
+language = "vi"
 flag = True
+
 
 def say():
     # Ghi âm giọng nói và chuyển đổi thành văn bản
@@ -34,238 +36,278 @@ def say():
     except Exception:
         You_say("...", text_widget)
         return "..."
-#%%
+
+
+####################################### FUNCTION ####################################
+# chào người dùng
 def hello():
     speak("Xin chào bạn, bạn tên là gì ạ!")
     while True:
         text = say()
-        if text == '...': 
+        if text == "...":
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
+        else:
+            break
     name = text.split()[-1]
-    day_time = int(strftime('%H'))
+    day_time = int(strftime("%H"))
     if day_time < 12:
         speak("Chào buổi sáng bạn {}. Chúc bạn một ngày tốt lành.".format(name))
     elif 12 <= day_time < 18:
-        speak("Chào buổi chiều bạn {}. Bạn đã dự định gì cho chiều nay chưa.".format(name))
+        speak(
+            "Chào buổi chiều bạn {}. Bạn đã dự định gì cho chiều nay chưa.".format(name)
+        )
     else:
         speak("Chào buổi tối bạn {}. Chúc bạn một buổi tối vui vẻ.".format(name))
     speak("Bạn có khỏe không?")
     while True:
         text = say()
-        if text == '...': 
+        if text == "...":
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
-    
+        else:
+            break
+    speak("Chúc bạn lúc nào cũng thật nhiều sức khỏe!")
 
-#xem thời gian
-def get_time(text):
+
+# xem thời gian
+def get_time():
     now = datetime.datetime.now()
-    speak('Bây giờ là %d giờ %d phút' % (now.hour, now.minute))
+    speak("Bây giờ là %d giờ %d phút" % (now.hour, now.minute))
     speak("Hôm nay là ngày %d tháng %d năm %d" % (now.day, now.month, now.year))
 
 
-#xem video trên youtube
+# xem video trên youtube
 def search_youtube():
     speak("Vui lòng nói từ khóa tìm kiếm mà bạn muốn xem")
     while True:
         text = say()
-        if text == '...': 
+        if text == "...":
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
+        else:
+            break
     search = VideosSearch(text)
 
     # Lấy kết quả tìm kiếm
     results = search.result()
 
     # Lấy một liên kết video ngẫu nhiên từ danh sách kết quả
-    if len(results['result']) > 0:
-        video_links = [result['link'] for result in results['result']]
+    if len(results["result"]) > 0:
+        video_links = [result["link"] for result in results["result"]]
         random_link = random.choice(video_links)
         webbrowser.open(random_link)
         speak("Video đã mở thành công")
     else:
         speak("Không tìm thấy kết quả phù hợp trên YouTube")
 
-#mở ứng dụng
+
+# mở ứng dụng
 def open_application(text):
-    if "google" in text: 
+    if "google" in text:
         os.startfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
         speak("Đã mở Google Chrome")
-    
-    elif "zalo" in text:    
-        os.startfile(r'C:\Users\ADMIN\AppData\Local\Programs\Zalo\Zalo.exe')
+
+    elif "zalo" in text:
+        os.startfile(r"C:\Users\ADMIN\AppData\Local\Programs\Zalo\Zalo.exe")
         speak("Đã mở Zalo")
-    
+
     elif "word" in text:
         os.startfile(r"C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE")
         speak("Đã mở Microsoft Word")
-    
+
     elif "excel" in text:
         os.startfile(r"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE")
         speak("Đã mở Microsoft Excel")
-    
+
     elif "powerpoint" in text or "thuyết trình" in text:
-        os.startfile(r"C:\Program Files\Microsoft Office\root\Office16\POWERPNT.EXE")     
+        os.startfile(r"C:\Program Files\Microsoft Office\root\Office16\POWERPNT.EXE")
         speak("Đã mở PowerPoint")
-    
-    elif "zoom" in text:    
-        os.startfile(r"C:\Users\ADMIN\AppData\Roaming\Zoom\bin\Zoom.exe")     
+
+    elif "zoom" in text:
+        os.startfile(r"C:\Users\ADMIN\AppData\Roaming\Zoom\bin\Zoom.exe")
         speak("Đã mở Zoom")
     elif "c++" in text:
-        os.startfile(r"C:\Program Files (x86)\Dev-Cpp\devcpp.exe")     
+        os.startfile(r"C:\Program Files (x86)\Dev-Cpp\devcpp.exe")
         speak("Đã mở Dev C++")
-    elif "java" in text:      
+    elif "java" in text:
         os.startfile(r"C:\Program Files\NetBeans-15\netbeans\bin\netbeans64.exe")
         speak("Đã mở Apache NetBeans")
     else:
-        speak("Ứng dụng chưa được cài đặt hoặc tôi chưa hiểu ý bạn. Bạn hãy thử lại!")
+        speak(
+            "Ứng dụng chưa được cài đặt hoặc tôi chưa hiểu ý bạn. Bạn hãy thử lại!"
+        )
 
-    
-#search_google
+
+# search_google
 def open_google_and_search():
     speak("Vui lòng nói từ khóa tìm kiếm trên google:")
     while True:
         text = say()
-        if text == '...': 
+        if text == "...":
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
+        else:
+            break
     # Tìm kiếm trên Google và lưu trữ các kết quả trong danh sách 'search_results'
     try:
         search_results = list(search(text, num_results=10))
-        # Lấy ngẫu nhiên một đường link trong danh sách kết quả tìm kiếm
+        # Lấy một đường link đầu tiên trong danh sách kết quả tìm kiếm
         if len(search_results) > 0:
             random_link = search_results[0]
             webbrowser.open(random_link)
             speak("Trang web đã mở thành công")
-    except: speak("Tôi không tìm thấy kết quả này trên google")
-    
-#xem thời tiết
+    except:
+        speak("Tôi không tìm thấy kết quả này trên google")
+
+
+# xem thời tiết
 def current_weather():
     speak("Bạn muốn xem thời tiết ở đâu ạ.")
     while True:
         city = say()
-        if city == '...': 
+        if city == "...":
             speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-        else: break
+        else:
+            break
+
+    # Tạo URL để gửi yêu cầu đến API thời tiết
     base_url = "http://api.openweathermap.org/data/2.5/weather?"
     if not city:
         pass
     api_key = "5f9242d740d1e6278e390d5fd21a3881"
     call_url = base_url + "appid=" + api_key + "&q=" + city
+
+    # Gửi yêu cầu đến API và lấy kết quả trả về
     response = requests.get(call_url)
     data = response.json()
+    # Kiểm tra xem API có trả về kết quả hay không
     if data["cod"] != "404":
+        # Trích xuất thông tin về nhiệt độ, áp suất, độ ẩm từ kết quả trả về
         city_res = data["main"]
         current_temperature = city_res["temp"]
         current_pressure = city_res["pressure"]
         current_humidity = city_res["humidity"]
-        
-        wthr = data["weather"]
-        weather_description = wthr[0]["description"]
+
         now = datetime.datetime.now()
+
+        # Tạo nội dung thông báo
         content = """
         Hôm nay là ngày {day} tháng {month} năm {year}
         Nhiệt độ trung bình là {temp} độ Kelvin
         Áp suất không khí là {pressure} héc tơ Pascal
         Độ ẩm là {humidity}%
-        Trời hôm nay quang mây. Dự báo mưa rải rác ở một số nơi.""".format(day = now.day,month = now.month, year= now.year, 
-                                                                           temp = current_temperature, pressure = current_pressure, humidity = current_humidity)
+        Trời hôm nay quang mây. Dự báo mưa rải rác ở một số nơi.""".format(
+            day=now.day,
+            month=now.month,
+            year=now.year,
+            temp=current_temperature,
+            pressure=current_pressure,
+            humidity=current_humidity,
+        )
         speak(content)
 
     else:
         speak("Tôi không tìm thấy địa chỉ nơi bạn muốn biết thời tiết")
 
-#đọc báo
+
+# đọc báo
 def read_news():
-    url = 'https://vnexpress.net/'
-    try: 
+    url = "https://vnexpress.net/"
+    try:
         # Gửi yêu cầu GET đến trang web và lấy nội dung trang web
         response = requests.get(url)
         content = response.content
 
         # Sử dụng BeautifulSoup để phân tích cú pháp nội dung trang web
-        soup = BeautifulSoup(content, 'html.parser')
+        soup = BeautifulSoup(content, "html.parser")
 
         # Tìm các đường dẫn đến các bài báo mới nhất trên trang web
-        articles = soup.find_all('article', class_='item-news')
+        articles = soup.find_all("article", class_="item-news")
 
         # Lấy đường dẫn đến 3 bài báo mới nhất
-        links = [article.a['href'] for article in articles[:3]]
+        links = [article.a["href"] for article in articles[:3]]
         # Đọc các bài báo mới nhất
         for link in links:
             response = requests.get(link)
             content = response.content
-            soup = BeautifulSoup(content, 'html.parser')
+            soup = BeautifulSoup(content, "html.parser")
 
             # Lấy tiêu đề, trích dẫn và nội dung của bài báo
-            if soup.find('h1', class_='title-detail') == None:
+            if soup.find("h1", class_="title-detail") == None:
                 pass
             else:
-                title = soup.find('h1', class_='title-detail').text.strip()
-            if soup.find('p', class_='description') == None:
+                title = soup.find("h1", class_="title-detail").text.strip()
+            if soup.find("p", class_="description") == None:
                 pass
             else:
-                summary = soup.find('p', class_='description').text.strip()
-            # lấy nội dung nếu cần thiết để cho bot nói
-            if soup.find('article', class_='fck_detail') == None:
+                summary = soup.find("p", class_="description").text.strip()
+            # nếu muốn để cho bot đọc thì thêm nội dung này
+            if soup.find("article", class_="fck_detail") == None:
                 pass
             else:
-                article_content = soup.find('article', class_='fck_detail').text.strip()
-                sentences = article_content.split('.')
+                # lấy nội dung
+                article_content = soup.find("article", class_="fck_detail").text.strip()
+                sentences = article_content.split(".")
 
-            if soup.find('p', class_='description') != None:
+            if soup.find("p", class_="description") != None:
                 text = f"Tiêu đề: {title}\n\n Trích dẫn từ: {summary}"
-            else: text = f"Tiêu đề: {title}"
+            else:
+                text = f"Tiêu đề: {title}"
             speak(text)
             webbrowser.open(link)
-        speak("Tôi đã mở 3 bài báo mới nhất, bạn có thể đọc qua")    
+        speak("Tôi đã mở 3 bài báo mới nhất, bạn có thể đọc qua")
     except:
         speak("Xin lỗi, hiện tại tôi đang quá tải, xin vui lòng thử lại sau")
-        
-#%%
+
+
+# thông tin về thuật ngữ hay người dùng qua wiki
 def tell_me_about():
     try:
         speak("Bạn muốn nghe về gì ạ")
         while True:
             text = say()
-            if text == '...': 
+            if text == "...":
                 speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-            else: break
-        contents = wikipedia.summary(text).split('\n')
+            else:
+                break
+        #để tìm kiếm và trả về nội dung của từ khóa
+        contents = wikipedia.summary(text).split("\n")
+        #đọc thông tin về thuật ngữ mà bạn muốn tìm kiếm
         speak(contents[0])
         for content in contents[1:]:
             speak("Bạn muốn nghe thêm không")
             while True:
                 text = say()
-                if text == '...': 
+                if text == "...":
                     speak("Tôi không nghe rõ, bạn có thể nói lại được không")
-                else: break
+                else:
+                    break
             if "có" not in text:
-                break    
+                break
             speak(content)
 
-        speak('Cảm ơn bạn đã lắng nghe!!!')
+        speak("Cảm ơn bạn đã lắng nghe!!!")
     except:
         speak("Tôi không tìm thấy thông tin của thuật ngữ mà bạn cần.")
 
+
+#  vị trí hiện tại
 def my_location():
     # Lấy địa chỉ IP của client
-    ip_add = requests.get('https://api.ipify.org').text
-    
+    ip_add = requests.get("https://api.ipify.org").text
+
     # Truy vấn địa lý thông qua API của geojs.io
-    url = 'https://get.geojs.io/v1/ip/geo/' + ip_add + '.json'
+    url = "https://get.geojs.io/v1/ip/geo/" + ip_add + ".json"
     geo_requests = requests.get(url)
     geo_data = geo_requests.json()
-    
+
     # Lấy thông tin về thành phố, bang/tỉnh, quốc gia từ dữ liệu trả về
-    city = geo_data['city']
-    state = geo_data['region']
-    country = geo_data['country']
-    
+    city = geo_data["city"]
+    state = geo_data["region"]
+    country = geo_data["country"]
+
     # Trả về tuple chứa thông tin về địa chỉ của client
     speak("Bạn đang ở " + " " + city + " " + state + " " + country)
 
+
+# chụp ảnh người dùng
 def screen():
     # Tạo một đối tượng VideoCapture để đọc dữ liệu từ webcam
     cap = cv2.VideoCapture(0)
@@ -275,20 +317,28 @@ def screen():
         ret, frame = cap.read()
 
         # Hiển thị khung hình
-        cv2.imshow('frame', frame)
+        cv2.imshow("frame", frame)
 
         # Nếu nhấn phím 'q', thoát vòng lặp
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.imwrite('screenshot.png', frame)
+        if cv2.waitKey(1) & 0xFF == ord("q"):
+            cv2.imwrite("screenshot.png", frame)
             break
-    speak("Chụp ảnh thành công")
+    speak("""Chụp ảnh thành công.
+                Bạn có muốn giữ ảnh này không?""")
+    text = say()
+    if "không" in text:
+        os.remove('screenshot.png')
+        speak("Tôi đã xóa ảnh này khỏi hệ thống")
+    else: speak("Tôi đã lưu ảnh này vào hệ thống")
     # Giải phóng tài nguyên và đóng cửa sổ
     cap.release()
     cv2.destroyAllWindows()
-#%%
-def help_me():
 
-    speak("""Tôi có thể giúp bạn thực hiện các chức năng sau đây:
+
+# Chúng tôi có thể làm được gì
+def help_me():
+    speak(
+        """Tôi có thể giúp bạn thực hiện các chức năng sau đây:
         1. Chào hỏi
         2. Hiển thị ngày hoặc giờ
         3. Mở ứng dụng
@@ -298,21 +348,26 @@ def help_me():
         7. Đọc báo hôm nay
         8. Tìm thông tin của một thuật ngữ hoặc một người
         9. Xem vị trí của bạn
-        10. Selfies""")
+        10. Selfies"""
+    )
 
-#%%
+
+####################################### FUNCTION ####################################
+
+
+# %%
 def assistant(text):
     global flag
     flag = False
     ok = 0
-    if "làm gì" in text or 'làm được gì' in text:
+    if "làm gì" in text or "làm được gì" in text:
         help_me()
         ok = 1
     elif "chào" in text or "hello" in text:
         hello()
         ok = 1
     elif "hiện tại" in text or "giờ" in text or "ngày" in text:
-        get_time(text)
+        get_time()
         ok = 1
     elif "tìm kiếm" in text or "trên google" in text or "web" in text:
         open_google_and_search()
@@ -320,7 +375,13 @@ def assistant(text):
     elif "mở" in text or "open" in text or "ứng dụng" in text:
         open_application(text)
         ok = 1
-    elif "youtube" in text or "nhạc" in text or "video" in text or "bài hát" in text or "xem" in text:
+    elif (
+        "youtube" in text
+        or "nhạc" in text
+        or "video" in text
+        or "bài hát" in text
+        or "xem" in text
+    ):
         search_youtube()
         ok = 1
     elif "thời tiết" in text:
@@ -329,10 +390,15 @@ def assistant(text):
     elif "đọc báo" in text:
         read_news()
         ok = 1
-    elif "của tôi" in text or "location" in text:
+    elif "vị trí" in text or "location" in text:
         my_location()
         ok = 1
-    elif "định nghĩa" in text or "cho tôi biết" in text or "tôi muốn biết" in text or "thông tin" in text:
+    elif (
+        "định nghĩa" in text
+        or "cho tôi biết" in text
+        or "tôi muốn biết" in text
+        or "thông tin" in text
+    ):
         tell_me_about()
         ok = 1
     elif "screen" in text or "chụp ảnh" in text or "selfie" in text:
@@ -341,20 +407,25 @@ def assistant(text):
     time.sleep(2)
     if ok:
         speak("Bạn cần tôi giúp gì nữa không ạ?")
-    else: 
-        speak("Tôi chưa hiểu ý của bạn, bạn có thể nói lại giúp tôi được không?")
-            
+    else:
+        speak(
+            "Tôi chưa hiểu ý của bạn, bạn có thể nói lại giúp tôi được không?"
+        )
+
     text_widget.configure(state=DISABLED)
     flag = True
-                
 
+
+# bot say
 def speak(text):
-    tts = gTTS(text = text,lang='vi')
+    tts = gTTS(text=text, lang="vi")
     tts.save("sound.mp3")
     playsound.playsound("sound.mp3")
     os.remove("sound.mp3")
     Bot_say(text, text_widget)
 
+
+# display bot say
 def Bot_say(text, text_widget):
     text_widget.configure(state=NORMAL)
     text_widget.insert(END, f"Trợ lý ảo: {text}\n\n")
@@ -362,22 +433,29 @@ def Bot_say(text, text_widget):
     text_widget.see(END)
     window.update()
 
+
 def You_say(text, text_widget):
     text_widget.configure(state=NORMAL)
     text_widget.insert(END, f"Tôi: {text}\n\n")
     text_widget.see(END)
     window.update()
-    if flag == True: assistant(text.lower())
-    
-def _on_enter_pressed(event):
+    if flag == True:
+        assistant(text.lower())
+
+
+# type text
+def _on_enter_pressed():
     msg = msg_entry.get()
     msg_entry.delete(0, END)
     You_say(msg, text_widget)
 
+
+# thread record
 def start_recording():
     record_button.config(text="Listening...", state=DISABLED)
     t = threading.Thread(target=record)
     t.start()
+
 
 def record():
     # Ghi âm giọng nói và chuyển đổi thành văn bản
@@ -393,50 +471,77 @@ def record():
         # Sau khi ghi âm hoàn thành, chuyển đổi trạng thái của nút Record trở lại
         record_button.config(text="Record", state=NORMAL)
 
-BG_GRAY="#ABB2B9"
-BG_COLOR="#17202A"
-TEXT_COLOR = "#EAECEE"
 
-FONT = "Helvetica 14"
-FONT_BOLD = "Helvetica 13 bold"
-window = Tk()
-window.title("Nhóm 2")
-window.configure(width=600, height=600, bg=BG_COLOR)
-# head label
-head_lable = Label(window, bg=BG_COLOR, fg=TEXT_COLOR, text="Welcome", font=FONT_BOLD, pady=10)
-head_lable.place(relheight=1)
+if __name__ == "__main__":
+    BG_GRAY = "#ABB2B9"
+    BG_COLOR = "#17202A"
+    TEXT_COLOR = "#EAECEE"
 
-#tiny divider
-line = Label(window, width=450, bg=BG_GRAY)
-line.place(relwidth=1, rely=0.07, relheight=0.012)
+    FONT = "Helvetica 14"
+    FONT_BOLD = "Helvetica 13 bold"
+    window = Tk()
+    window.title("Nhóm 2")
+    window.configure(width=600, height=600, bg=BG_COLOR)
+    # head label
+    head_lable = Label(
+        window, bg=BG_COLOR, fg=TEXT_COLOR, text="Welcome", font=FONT_BOLD, pady=10
+    )
+    head_lable.place(relheight=1)
 
-#text widget
-text_widget = Text(window, width=20, height=2, bg=BG_COLOR, fg=TEXT_COLOR, font=FONT_BOLD, padx=5, pady=5)
-text_widget.place(relheight=0.745, relwidth=1, rely=0.08)
+    # tiny divider
+    line = Label(window, width=450, bg=BG_GRAY)
+    line.place(relwidth=1, rely=0.07, relheight=0.012)
 
-text_widget.configure(cursor="arrow", state=DISABLED)
+    # text widget
+    text_widget = Text(
+        window,
+        width=20,
+        height=2,
+        bg=BG_COLOR,
+        fg=TEXT_COLOR,
+        font=FONT_BOLD,
+        padx=5,
+        pady=5,
+    )
+    text_widget.place(relheight=0.745, relwidth=1, rely=0.08)
 
-# scroll bar
-scrollbar = Scrollbar(text_widget)
-scrollbar.place(relheight=1, relx=0.974)
-scrollbar.configure(command=text_widget.yview)
+    text_widget.configure(cursor="arrow", state=DISABLED)
 
-#bottom label 
-bottom_label = Label(window, bg=BG_GRAY, height=80)
-bottom_label.place(relwidth=1, rely=(0.825))
+    # scroll bar
+    scrollbar = Scrollbar(text_widget)
+    scrollbar.place(relheight=1, relx=0.974)
+    scrollbar.configure(command=text_widget.yview)
 
-# message entry box
-msg_entry = Entry(bottom_label, bg="#2C3E50", fg=TEXT_COLOR, font=FONT)
-msg_entry.place(relwidth=0.74, relheight=0.06, rely=0.008, relx=0.011)
-msg_entry.focus()
-msg_entry.bind("<Return>", lambda event: _on_enter_pressed(event))
+    # bottom label
+    bottom_label = Label(window, bg=BG_GRAY, height=80)
+    bottom_label.place(relwidth=1, rely=(0.825))
 
-#send button
-send_button = Button(bottom_label, text="Send", font=FONT_BOLD, width=20, bg=BG_GRAY, command=lambda: _on_enter_pressed(None))
-send_button.place(relx=0.77, rely=0.008, relheight=0.06, relwidth=0.22)
+    # message entry box
+    msg_entry = Entry(bottom_label, bg="#2C3E50", fg=TEXT_COLOR, font=FONT)
+    msg_entry.place(relwidth=0.74, relheight=0.06, rely=0.008, relx=0.011)
+    msg_entry.focus()
+    msg_entry.bind("<Return>", lambda event: _on_enter_pressed())
 
-# record button
-record_button = Button(bottom_label, text="Record", font=FONT_BOLD, width=20, bg=BG_GRAY, command=lambda: start_recording())
-record_button.place(relx=0.54, rely=0.008, relheight=0.06, relwidth=0.22)   
+    # send button
+    send_button = Button(
+        bottom_label,
+        text="Send",
+        font=FONT_BOLD,
+        width=20,
+        bg=BG_GRAY,
+        command=lambda: _on_enter_pressed(),
+    )
+    send_button.place(relx=0.77, rely=0.008, relheight=0.06, relwidth=0.22)
 
-window.mainloop()
+    # record button
+    record_button = Button(
+        bottom_label,
+        text="Record",
+        font=FONT_BOLD,
+        width=20,
+        bg=BG_GRAY,
+        command=lambda: start_recording(),
+    )
+    record_button.place(relx=0.54, rely=0.008, relheight=0.06, relwidth=0.22)
+
+    window.mainloop()
