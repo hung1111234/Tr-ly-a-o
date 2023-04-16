@@ -1,0 +1,12 @@
+threading
+playsound==1.2.2
+SpeechRecognition
+wikipedia
+urllib3
+gtts
+requests
+youtubesearchpython
+googlesearch-python
+opencv-python
+tk
+beautifulsoup4
