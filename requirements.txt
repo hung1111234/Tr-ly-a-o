@@ -10,3 +10,4 @@ googlesearch-python
 opencv-python
 tk
 beautifulsoup4
+PyAudio
